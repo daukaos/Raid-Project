@@ -1,12 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func printSchedule(rows []string, busy string, important string) {
 	if len(rows) == 0 {
 		fmt.Println("error: empty schedule")
 		return // this part checks if there are no rows to make the schedule,
 		//if there are no rows then returns "error:empty schedule"
+	}
+
+	if len(busy) > 9 || len(busy) <= 0 {
+		fmt.Println("error: invalid number of characters")
+		return
+	}
+	if len(important) > 9 || len(important) <= 0 {
+		fmt.Println("error: invalid number of characters")
+		return
 	}
 
 	expectedLen := len(rows[0]) // it is the variable,it keeps the value of the first row,
@@ -34,5 +45,5 @@ func printSchedule(rows []string, busy string, important string) {
 }
 
 func main() {
-	printSchedule([]string{"0102", "1100", "0010", "2001"}, "###", "!!!")
+	printSchedule([]string{"0102", "1100", "0010", "2001"}, "#", "!")
 }
