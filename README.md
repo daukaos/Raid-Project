@@ -1,3 +1,4 @@
+
 Schedule Table
 
 A small Go program that prints a weekly/daily schedule as a colored ASCII table.

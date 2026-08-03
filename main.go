@@ -11,6 +11,7 @@ const (
 	ColorReset  = "\033[0m"
 )
 
+// This function is a helper-function
 func centerText(s string) string {
 	const width = 9
 	padding := width - len(s)
@@ -23,6 +24,8 @@ func centerText(s string) string {
 }
 
 func printSchedule(rows []string, busy string, important string) {
+
+	// This part of the code checks if the given input is valid
 	if len(rows) == 0 {
 		fmt.Println("error: empty schedule")
 		return
@@ -39,10 +42,10 @@ func printSchedule(rows []string, busy string, important string) {
 
 	expectedLen := len(rows[0])
 
-	// Validate rows and calculate busiest row
+	// This part of the code calculates and gives the busiest row
 	var maxRowSum, busiestRow int
 
-	for rIdx, row := range rows {
+	for rowIndex, row := range rows {
 		if len(row) == 0 {
 			fmt.Println("error: empty schedule")
 			return
@@ -64,14 +67,14 @@ func printSchedule(rows []string, busy string, important string) {
 			}
 		}
 
-		// Update busiest row (1-based index)
+		// This part updates the busiest row
 		if currentRowSum > maxRowSum {
 			maxRowSum = currentRowSum
-			busiestRow = rIdx + 1
+			busiestRow = rowIndex + 1
 		}
 	}
 
-	// Calculate busiest column
+	// This part of the code calculates and gives the busiest column
 	var maxColSum, busiestCol int
 
 	for col := 0; col < expectedLen; col++ {
@@ -82,14 +85,14 @@ func printSchedule(rows []string, busy string, important string) {
 			}
 		}
 
-		// Update busiest column (1-based index)
+		// This part updates the busiest column
 		if currentColSum > maxColSum {
 			maxColSum = currentColSum
 			busiestCol = col + 1
 		}
 	}
 
-	// Print the schedule table
+	// This part prints the table itself
 	cellBorder := "+---------"
 	border := strings.Repeat(cellBorder, expectedLen) + "+"
 
@@ -117,7 +120,7 @@ func printSchedule(rows []string, busy string, important string) {
 	}
 	fmt.Println(border)
 
-	// Print statistics
+	// This part prints statistics
 	fmt.Println("Busiest column: ", busiestCol)
 	fmt.Println("Busiest row: ", busiestRow)
 }
