@@ -2,7 +2,19 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
+
+func centerText(s string) string {
+	const width = 9
+	padding := width - len(s)
+	if padding <= 0 {
+		return s
+	}
+	left := padding / 2
+	right := padding - left
+	return strings.Repeat(" ", left) + s + strings.Repeat(" ", right)
+}
 
 func printSchedule(rows []string, busy string, important string) {
 	if len(rows) == 0 {
@@ -41,6 +53,31 @@ func printSchedule(rows []string, busy string, important string) {
 			}
 		}
 	}
+	cellBorder := "+---------"
+	border := strings.Repeat(cellBorder, expectedLen) + "+"
+
+	for _, row := range rows {
+		fmt.Println(border)
+		var sb strings.Builder
+		sb.WriteString("|")
+
+		for i := 0; i < len(row); i++ {
+			var text string
+			switch row[i] {
+			case '1':
+				text = busy
+			case '2':
+				text = important
+			default:
+				text = ""
+			}
+
+			sb.WriteString(centerText(text))
+			sb.WriteString("|")
+		}
+		fmt.Println(sb.String())
+	}
+	fmt.Println(border)
 
 }
 
