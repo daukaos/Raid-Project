@@ -90,5 +90,5 @@ func printSchedule(rows []string, busy string, important string) {
 }
 
 func main() {
-	printSchedule([]string{"0102", "1100", "0010", "2001"}, "#", "!")
+	printSchedule([]string{"01002", "10100", "00010", "20001"}, "#", "!")
 }
