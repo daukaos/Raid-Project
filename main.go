@@ -39,7 +39,10 @@ func printSchedule(rows []string, busy string, important string) {
 
 	expectedLen := len(rows[0])
 
-	for _, row := range rows {
+	// Validate rows and calculate busiest row
+	var maxRowSum, busiestRow int
+
+	for rIdx, row := range rows {
 		if len(row) == 0 {
 			fmt.Println("error: empty schedule")
 			return
@@ -48,15 +51,45 @@ func printSchedule(rows []string, busy string, important string) {
 			fmt.Println("error: rows have different lengths")
 			return
 		}
+
+		currentRowSum := 0
 		for i := 0; i < len(row); i++ {
 			c := row[i]
 			if c != '0' && c != '1' && c != '2' {
 				fmt.Println("error: invalid symbol (only 0/1/2 allowed)")
 				return
 			}
+			if c != '0' {
+				currentRowSum++
+			}
+		}
+
+		// Update busiest row (1-based index)
+		if currentRowSum > maxRowSum {
+			maxRowSum = currentRowSum
+			busiestRow = rIdx + 1
 		}
 	}
 
+	// Calculate busiest column
+	var maxColSum, busiestCol int
+
+	for col := 0; col < expectedLen; col++ {
+		currentColSum := 0
+		for row := 0; row < len(rows); row++ {
+			if rows[row][col] != '0' {
+				currentColSum++
+			}
+		}
+
+		// Update busiest column (1-based index)
+		if currentColSum > maxColSum {
+			maxColSum = currentColSum
+			busiestCol = col + 1
+		}
+	}
+
+	// Print the schedule table
 	cellBorder := "+---------"
 	border := strings.Repeat(cellBorder, expectedLen) + "+"
 
@@ -83,8 +116,12 @@ func printSchedule(rows []string, busy string, important string) {
 		fmt.Println(sb.String())
 	}
 	fmt.Println(border)
+
+	// Print statistics
+	fmt.Println("Busiest column: ", busiestCol)
+	fmt.Println("Busiest row: ", busiestRow)
 }
 
 func main() {
-	printSchedule([]string{"01002", "10100", "00010", "20001"}, "#", "!")
+	printSchedule([]string{"01002", "10111", "00010", "20001"}, "#", "!")
 }
