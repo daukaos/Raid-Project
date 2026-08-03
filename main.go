@@ -5,6 +5,13 @@ import (
 	"strings"
 )
 
+// ANSI Color Constants
+const (
+	ColorRed    = "\033[31m"
+	ColorYellow = "\033[33m"
+	ColorReset  = "\033[0m"
+)
+
 func centerText(s string) string {
 	const width = 9
 	padding := width - len(s)
@@ -19,8 +26,7 @@ func centerText(s string) string {
 func printSchedule(rows []string, busy string, important string) {
 	if len(rows) == 0 {
 		fmt.Println("error: empty schedule")
-		return // this part checks if there are no rows to make the schedule,
-		//if there are no rows then returns "error:empty schedule"
+		return
 	}
 
 	if len(busy) > 9 || len(busy) <= 0 {
@@ -32,27 +38,26 @@ func printSchedule(rows []string, busy string, important string) {
 		return
 	}
 
-	expectedLen := len(rows[0]) // it is the variable,it keeps the value of the first row,
-	// with this we can compare the lengths of the strings
+	expectedLen := len(rows[0])
 
-	for _, row := range rows { // this is the loop, it checks the every given row
+	for _, row := range rows {
 		if len(row) == 0 {
 			fmt.Println("error: empty schedule")
-			return // this part checks every row, if there is one with length of 0 then returns error
+			return
 		}
 		if len(row) != expectedLen {
 			fmt.Println("error: rows have different lengths")
-			return // this checks the first row to other rows, if the length are different, returns error
+			return
 		}
 		for i := 0; i < len(row); i++ {
 			c := row[i]
 			if c != '0' && c != '1' && c != '2' {
 				fmt.Println("error: invalid symbol (only 0/1/2 allowed)")
-				return // this nested loop checks if the characters in every row are the ones that are allowed,
-				// if there are characters that are not allowed, returns error
+				return
 			}
 		}
 	}
+
 	cellBorder := "+---------"
 	border := strings.Repeat(cellBorder, expectedLen) + "+"
 
@@ -62,23 +67,26 @@ func printSchedule(rows []string, busy string, important string) {
 		sb.WriteString("|")
 
 		for i := 0; i < len(row); i++ {
-			var text string
+			var cellContent string
+
 			switch row[i] {
 			case '1':
-				text = busy
+				// Center raw text first, then wrap in Red
+				cellContent = ColorRed + centerText(busy) + ColorReset
 			case '2':
-				text = important
+				// Center raw text first, then wrap in Yellow
+				cellContent = ColorYellow + centerText(important) + ColorReset
 			default:
-				text = ""
+				// Empty cell needs 9 spaces centered
+				cellContent = centerText("")
 			}
 
-			sb.WriteString(centerText(text))
+			sb.WriteString(cellContent)
 			sb.WriteString("|")
 		}
 		fmt.Println(sb.String())
 	}
 	fmt.Println(border)
-
 }
 
 func main() {
