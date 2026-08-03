@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-// ANSI Color Constants
 const (
 	ColorRed    = "\033[31m"
 	ColorYellow = "\033[33m"
@@ -71,13 +70,10 @@ func printSchedule(rows []string, busy string, important string) {
 
 			switch row[i] {
 			case '1':
-				// Center raw text first, then wrap in Red
 				cellContent = ColorRed + centerText(busy) + ColorReset
 			case '2':
-				// Center raw text first, then wrap in Yellow
 				cellContent = ColorYellow + centerText(important) + ColorReset
 			default:
-				// Empty cell needs 9 spaces centered
 				cellContent = centerText("")
 			}
 
